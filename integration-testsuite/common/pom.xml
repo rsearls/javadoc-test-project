@@ -1,0 +1,119 @@
+	<!--
+		Licensed to the Apache Software Foundation (ASF) under one or more
+		contributor license agreements. See the NOTICE file distributed with
+		this work for additional information regarding copyright ownership.
+		The ASF licenses this file to you under the Apache License, Version
+		2.0 (the "License"); you may not use this file except in compliance
+		with the License. You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+		applicable law or agreed to in writing, software distributed under the
+		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
+	-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<name>Wise Integration Common Test</name>
+	<artifactId>wise-integration-common</artifactId>
+
+	<parent>
+		<groupId>org.jboss.wise</groupId>
+		<artifactId>wise-integration-testsuite</artifactId>
+		<version>2.1.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.jboss.shrinkwrap.resolver</groupId>
+			<artifactId>shrinkwrap-resolver-depchain</artifactId>
+			<type>pom</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.shrinkwrap.resolver</groupId>
+			<artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.milyn</groupId>
+			<artifactId>milyn-smooks-rules</artifactId>
+			<version>${milyn.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.milyn</groupId>
+			<artifactId>milyn-smooks-validation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.milyn</groupId>
+			<artifactId>milyn-smooks-javabean</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.milyn</groupId>
+			<artifactId>milyn-commons</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.milyn</groupId>
+			<artifactId>milyn-smooks-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.wise</groupId>
+			<artifactId>wise-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+
+		<!--
+			Name:  noprepare
+			Descr: Skip test preparation with -Dnoprepare
+		-->
+		<profile>
+			<id>noprepare</id>
+			<activation>
+				<property>
+					<name>!noprepare</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.gmaven</groupId>
+						<artifactId>gmaven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>testsuite-default</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>execute</goal>
+								</goals>
+								<configuration>
+									<source>${project.basedir}/src/test/scripts/testsuite_common.groovy</source>
+									<properties>
+										<inputFile>${jboss.home}/standalone/configuration/standalone.xml</inputFile>
+										<outputFile>${jboss.home}/standalone/configuration/testsuite-standalone.xml</outputFile>
+										<usersPropFile>${project.basedir}/src/test/java/org/jboss/wise/test/integration/wsdlResolver/jbossws-users.properties</usersPropFile>
+										<rolesPropFile>${project.basedir}/src/test/java/org/jboss/wise/test/integration/wsdlResolver/jbossws-roles.properties</rolesPropFile>
+									</properties>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
+</project>
